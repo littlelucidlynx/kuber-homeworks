@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: syslog-reader
+  labels:
+    app: syslog-reader
+spec:
+  selector:
+    matchLabels:
+      app: syslog-reader
+  template:
+    metadata:
+      labels:
+        app: syslog-reader
+    spec:
+      volumes:
+        - name: hostpath-volume
+          hostPath:
+            path: /var/log
+      containers:
+        - name: multitool
+          image: wbitt/network-multitool:latest
+          command:
+            - /bin/sh
+            - -c
+            - >
+              while true;
+              do cat /hostlogs/file;
+              sleep 10;
+              done;
+          volumeMounts:
+            - name: hostpath-volume
+              mountPath: /hostlogs/file
+              subPath: syslog
+              readOnly: true
