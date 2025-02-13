@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shared-data-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shared-data
+  template:
+    metadata:
+      labels:
+        app: shared-data
+    spec:
+      volumes:
+        - name: nfs-p-volume
+          persistentVolumeClaim:
+            claimName: nfs-p-claim
+      containers:
+        - name: multitool
+          image: wbitt/network-multitool:latest
+          volumeMounts:
+            - name: nfs-p-volume
+              mountPath: /in
