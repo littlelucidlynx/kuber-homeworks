@@ -1,0 +1,5 @@
+image:
+  repository: ubuntu/squid
+  tag: "4.10-20.04_beta"
+service:
+  nodePort: 31002
